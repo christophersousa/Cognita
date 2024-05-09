@@ -1,41 +1,29 @@
 import type { MetaFunction } from "@remix-run/node";
+import { Container } from "~/components/Container";
+import AddIcon from "~/assets/icon/add.svg"
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "Congnittron" },
+    { name: "description", content: "Welcome to express!" },
   ];
 };
 
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1 className="text-red-400">Welcome to Remix</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/jokes"
-            rel="noreferrer"
-          >
-            Deep Dive Jokes App Tutorial
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="flex justify-center py-20">
+      <Container>
+        <div className="flex justify-between items-center">
+          <h1 className="text-title font-semibold text-secondary-100">Título da trilha</h1>
+          <div className="flex items-center py-3 px-4 gap-1 bg-primary text-base text-white font-semibold cursor-pointer rounded-xl hover:bg-primary-100">
+            <img
+              src={AddIcon}
+              className="w-5 h-5"
+            />
+            Adicionar passos
+          </div>
+        </div>
+      </Container>
     </div>
   );
 }

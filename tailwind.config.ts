@@ -9,11 +9,15 @@ export default {
         foreground: "var(--foreground)",
         primary: {
           DEFAULT: "var(--primary)",
+          100: "var(--primary-100)",
         },
         secondary: {
           DEFAULT: "var(--secondary)",
           100: "var(--secondary-100)",
         }
+      },
+      fontSize: {
+        "title": "28px"
       },
     },
   },
