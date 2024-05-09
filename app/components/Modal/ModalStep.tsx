@@ -1,14 +1,30 @@
-import React from 'react'
+import { useEffect, useRef } from 'react'
 interface PropsModal{
     setPopUp: (value:boolean)=>void
 }
 function Modal({setPopUp}:PropsModal) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
   const handleSubmit = ()=>{
     setPopUp(false)
   }
+
+  useEffect(() => {
+    const handleClickOutside = (event:any) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        setPopUp(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [setPopUp]);
+
   return (
     <div className='w-screen h-screen bg-[#4F4B5C] bg-opacity-70 fixed top-0 right-0 flex justify-center items-center'>
-      <div className='bg-white p-10 rounded-md shadow-md py-12 w-[680px]'>
+      <div ref={modalRef} className='container bg-white p-10 rounded-md shadow-md py-12 w-[680px]'>
         <h1 className='font-semibold text-title text-secondary-100'>Adicionar Passo</h1>
         <form className='flex flex-col gap-4 mt-10' onSubmit={handleSubmit}>
             <div className='flex flex-col'>
@@ -39,14 +55,6 @@ function Modal({setPopUp}:PropsModal) {
                 </button>
             </div>
         </form>
-        {/* <div className='flex justify-between mt-5'>
-          <button className='outline outline-1 outline-[#101f20] bg-[#101f20] text-white py-2 px-4 hover:bg-transparent hover:text-black'
-          onClick={() => setPopUp(false)}
-          >No, Cancel</button>
-          <button className='outline outline-1 outline-[#101f20] hover:bg-[#101f20] hover:text-white py-2 px-4 bg-transparent text-black'
-          onClick={() => console.log("Please like and subscribe")}
-          >Yes, Delete</button>
-        </div> */}
       </div>
     </div>
   )
