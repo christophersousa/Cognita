@@ -3,7 +3,7 @@ interface AppGlobalContainerProps {
 }
 export const Container = ({children}:  AppGlobalContainerProps) => {
     return (
-        <div className="max-w-[800] w-full px-4 md:px-20" >
+        <div className="max-w-[800px] w-full" >
             {children}
         </div>
     )

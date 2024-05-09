@@ -13,6 +13,7 @@ export default {
         },
         secondary: {
           DEFAULT: "var(--secondary)",
+          50: "var(--secondary-50)",
           100: "var(--secondary-100)",
         }
       },
