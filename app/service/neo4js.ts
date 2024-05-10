@@ -7,7 +7,8 @@ export async function fetchDataTrail(trailId:string):Promise<IListStepsByTrail> 
   const session = driver.session();
   try {
     const result = await session.run(
-      "MATCH (t:Trail {id: $trailId})-[:HAS_STEP]->(s:Step) RETURN t, COLLECT(s) AS steps",
+      // "MATCH (t:Trail {id: $trailId})-[:HAS_STEP]->(s:Step) RETURN t, COLLECT(s) AS steps",
+      "MATCH (t:Trail {id: $trailId}) OPTIONAL MATCH (t)-[:HAS_STEP]->(s:Step) RETURN t, COLLECT(s) AS steps",
       { trailId }
     );
     
