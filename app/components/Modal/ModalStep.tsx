@@ -3,10 +3,13 @@ import { Bounce, toast } from 'react-toastify';
 import { addStepByTrail } from '~/service/neo4js';
 import { Loading } from '../Loading/Loading';
 import { IStep } from '~/interface/interfaces';
+import { useParams } from '@remix-run/react';
 interface PropsModal{
     setPopUp: (value:boolean)=>void;
-    handleAddStep: (step:IStep)=>void
+    handleAddStep: (step:IStep)=>void;
+
 }
+
 function Modal({setPopUp, handleAddStep}:PropsModal) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [disable, setDisable] = useState(true)
@@ -17,17 +20,19 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
       content: ''
   });
 
+  const params = useParams();
+
   const handleSubmit = async(event:FormEvent<HTMLFormElement>)=>{
     event.preventDefault()
     try {
       setLoading(true)
-      const data = await addStepByTrail('trail-1', formData)
+      const data = await addStepByTrail(params.trailId || '', formData)
       setLoading(false)
       toast.success('Passo criado com sucesso!', {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
-        closeOnClick: true,
+        closeOnClick: false,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
@@ -40,7 +45,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
-        closeOnClick: true,
+        closeOnClick: false,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
@@ -80,7 +85,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
 
   return (
     <div className='w-screen h-screen bg-[#4F4B5C] bg-opacity-70 fixed top-0 right-0 flex justify-center items-center'>
-      <div ref={modalRef} className='container bg-white p-10 rounded-md shadow-md py-12 w-[680px]'>
+      <div ref={modalRef} className='container bg-white p-10 rounded-3xl shadow-md py-12 w-[680px]'>
         <h1 className='font-semibold text-title text-secondary-100'>Adicionar Passo</h1>
         <form className='flex flex-col gap-4 mt-10' onSubmit={handleSubmit}>
             <div className='flex flex-col'>
