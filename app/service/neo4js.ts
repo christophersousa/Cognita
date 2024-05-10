@@ -3,10 +3,13 @@ import { IListStepsByTrail, IStep } from '~/interface/interfaces';
 
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '12345678'));
 
-export async function fetchDataTrail():Promise<IListStepsByTrail> {
+export async function fetchDataTrail(trailId:string):Promise<IListStepsByTrail> {
   const session = driver.session();
   try {
-    const result = await session.run("MATCH (t:Trail {id: 'trail-1'})-[:HAS_STEP]->(s:Step) RETURN t, COLLECT(s) AS steps");
+    const result = await session.run(
+      "MATCH (t:Trail {id: $trailId})-[:HAS_STEP]->(s:Step) RETURN t, COLLECT(s) AS steps",
+      { trailId }
+    );
     
     if (result.records.length === 0) {
       throw new Error('Trilha não encontrada');
