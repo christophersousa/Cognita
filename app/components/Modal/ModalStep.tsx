@@ -1,11 +1,16 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import { Bounce, toast } from 'react-toastify';
 import { addStepByTrail } from '~/service/neo4js';
+import { Loading } from '../Loading/Loading';
+import { IStep } from '~/interface/interfaces';
 interface PropsModal{
-    setPopUp: (value:boolean)=>void
+    setPopUp: (value:boolean)=>void;
+    handleAddStep: (step:IStep)=>void
 }
-function Modal({setPopUp}:PropsModal) {
+function Modal({setPopUp, handleAddStep}:PropsModal) {
   const modalRef = useRef<HTMLDivElement>(null);
-
+  const [disable, setDisable] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
       id: '',
       title: '',
@@ -15,11 +20,33 @@ function Modal({setPopUp}:PropsModal) {
   const handleSubmit = async(event:FormEvent<HTMLFormElement>)=>{
     event.preventDefault()
     try {
-      console.log(formData)
+      setLoading(true)
       const data = await addStepByTrail('trail-1', formData)
-      setPopUp(false)
+      setLoading(false)
+      toast.success('Passo criado com sucesso!', {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
+      handleAddStep(data)
     } catch (error) {
-      console.log(error)
+      toast.error('Não foi possível registrar esse passo, tente novamente mais tarde!', {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   }
   const handleChange = (event:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -28,7 +55,7 @@ function Modal({setPopUp}:PropsModal) {
         ...formData,
         [name]: value
     });
-};
+  };
 
   useEffect(() => {
     const handleClickOutside = (event:any) => {
@@ -42,6 +69,14 @@ function Modal({setPopUp}:PropsModal) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [setPopUp]);
+
+  useEffect(()=>{
+    if(formData.id != "" && formData.title != "" && formData.content != ""){
+      setDisable(false)
+    }else{
+      setDisable(true)
+    }
+  },[formData])
 
   return (
     <div className='w-screen h-screen bg-[#4F4B5C] bg-opacity-70 fixed top-0 right-0 flex justify-center items-center'>
@@ -63,16 +98,17 @@ function Modal({setPopUp}:PropsModal) {
             </div>
             <div className='flex justify-end gap-6 mt-10'>
                 <button 
-                    className='py-3 px-6 border border-primary text-primary-100 font-semibold rounded-xl'
+                    className='py-3 px-6 min-w-36 border border-primary text-primary-100 font-semibold rounded-xl'
                     onClick={() => setPopUp(false)}
                 >
                     Cancelar
                 </button>
                 <button 
+                    disabled={disable}
                     type='submit'
-                    className='py-3 px-6 bg-primary text-white font-semibold rounded-xl'
+                    className='py-3 min-w-36 flex justify-center items-center px-6 bg-primary text-white font-semibold rounded-xl disabled:bg-foreground'
                 >
-                    Criar passo
+                  {loading? <Loading loading={loading} color='#000' w='15px' h='15px'/> : "Criar passo"}
                 </button>
             </div>
         </form>

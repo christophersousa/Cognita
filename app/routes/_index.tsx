@@ -6,7 +6,7 @@ import AddIcon from "~/assets/icon/add.svg"
 import Modal from "~/components/Modal/ModalStep";
 import neo4j from 'neo4j-driver';
 import { fetchDataTrail } from "~/service/neo4js";
-import { IListStepsByTrail } from "~/interface/interfaces";
+import { IListStepsByTrail, IStep } from "~/interface/interfaces";
 import { Loading } from "~/components/Loading/Loading";
 
 export const meta: MetaFunction = () => {
@@ -21,6 +21,10 @@ export default function Index() {
   const [data, setData] = useState<IListStepsByTrail>();
   const [loading, setLoading] = useState<boolean>(false)
 
+  const handleAddStep = (step:IStep)=>{
+    data?.steps.push(step)
+  }
+
   useEffect(() => {
     const request = async ()=>{
       setLoading(true)
@@ -34,7 +38,9 @@ export default function Index() {
     <main className="flex justify-center py-20">
       <Container>
         {/* loadding */}
-        <Loading loading={loading}/>
+        <div className="absolute top-1/2 right-1/2">
+          <Loading loading={loading}/>
+        </div>
         {/* content */}
         <div style={{display: loading?"none": "block"}} >
           {/* Header */}
@@ -59,7 +65,7 @@ export default function Index() {
           </div>
         </div>
         {/* Modal */}
-        {popUp && <Modal setPopUp={setPopUp} />}
+        {popUp && <Modal setPopUp={setPopUp} handleAddStep={handleAddStep} />}
       </Container>
     </main>
   );
