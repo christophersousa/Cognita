@@ -1,13 +1,34 @@
-import { useEffect, useRef } from 'react'
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react'
+import { addStepByTrail } from '~/service/neo4js';
 interface PropsModal{
     setPopUp: (value:boolean)=>void
 }
 function Modal({setPopUp}:PropsModal) {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const handleSubmit = ()=>{
-    setPopUp(false)
+  const [formData, setFormData] = useState({
+      id: '',
+      title: '',
+      content: ''
+  });
+
+  const handleSubmit = async(event:FormEvent<HTMLFormElement>)=>{
+    event.preventDefault()
+    try {
+      console.log(formData)
+      const data = await addStepByTrail('trail-1', formData)
+      setPopUp(false)
+    } catch (error) {
+      console.log(error)
+    }
   }
+  const handleChange = (event:ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setFormData({
+        ...formData,
+        [name]: value
+    });
+};
 
   useEffect(() => {
     const handleClickOutside = (event:any) => {
@@ -29,15 +50,15 @@ function Modal({setPopUp}:PropsModal) {
         <form className='flex flex-col gap-4 mt-10' onSubmit={handleSubmit}>
             <div className='flex flex-col'>
                 <label className='text-sm font-semibold' htmlFor='id'>Id</label>
-                <input type="text" name='id' className='bg-background outline outline-1 outline-secondary-75 h-12 py-3 px-4 rounded-xl focus:outline-primary focus:shadow-md focus:shadow-[#7357FF]/50'/>
+                <input type="text" name='id' value={formData.id} onChange={handleChange} className='bg-background outline outline-1 outline-secondary-75 h-12 py-3 px-4 rounded-xl focus:outline-primary focus:shadow-md focus:shadow-[#7357FF]/50'/>
             </div>
             <div className='flex flex-col'>
                 <label className='text-sm font-semibold' htmlFor='title'>Titulo</label>
-                <input type="text"  name='title' className='bg-background outline outline-1 outline-secondary-75 h-12 py-3 px-4 rounded-xl focus:outline-primary focus:shadow-md focus:shadow-[#7357FF]/50'/>
+                <input type="text"  name='title' value={formData.title} onChange={handleChange} className='bg-background outline outline-1 outline-secondary-75 h-12 py-3 px-4 rounded-xl focus:outline-primary focus:shadow-md focus:shadow-[#7357FF]/50'/>
             </div>
             <div className='flex flex-col'>
                 <label className='text-sm font-semibold' htmlFor='content'>Conteúdo</label>
-                <textarea name='content' className='resize-none bg-background outline outline-1 outline-secondary-75 h-28 py-3 px-4 rounded-xl focus:outline-primary focus:shadow-md focus:shadow-[#7357FF]/50'>
+                <textarea name='content' value={formData.content} onChange={handleChange} className='resize-none bg-background outline outline-1 outline-secondary-75 h-28 py-3 px-4 rounded-xl focus:outline-primary focus:shadow-md focus:shadow-[#7357FF]/50'>
                 </textarea>
             </div>
             <div className='flex justify-end gap-6 mt-10'>
