@@ -70,8 +70,8 @@ export default function ExplorePage(){
                 {/* List of steps */}
                 <div className="flex flex-col gap-6 mt-10">
                     {data?.steps.reverse().map(step => (
-                    <div onClick={()=>handleSelectStep(step)}>
-                        <CardStep key={step.id} title={step.title} content={step.content} id={step.id} />
+                    <div onClick={()=>handleSelectStep(step)} key={step.id}>
+                        <CardStep  title={step.title} content={step.content} id={step.id} />
                     </div>
                     ))}
                 </div>
