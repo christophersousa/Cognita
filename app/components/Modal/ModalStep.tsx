@@ -3,10 +3,13 @@ import { Bounce, toast } from 'react-toastify';
 import { addStepByTrail } from '~/service/neo4js';
 import { Loading } from '../Loading/Loading';
 import { IStep } from '~/interface/interfaces';
+import { useParams } from '@remix-run/react';
 interface PropsModal{
     setPopUp: (value:boolean)=>void;
-    handleAddStep: (step:IStep)=>void
+    handleAddStep: (step:IStep)=>void;
+
 }
+
 function Modal({setPopUp, handleAddStep}:PropsModal) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [disable, setDisable] = useState(true)
@@ -17,11 +20,13 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
       content: ''
   });
 
+  const params = useParams();
+
   const handleSubmit = async(event:FormEvent<HTMLFormElement>)=>{
     event.preventDefault()
     try {
       setLoading(true)
-      const data = await addStepByTrail('trail-1', formData)
+      const data = await addStepByTrail(params.trailId || '', formData)
       setLoading(false)
       toast.success('Passo criado com sucesso!', {
         position: "bottom-center",
