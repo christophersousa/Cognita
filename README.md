@@ -1,4 +1,4 @@
-# Welcome to project of test para a Cognittron!
+# Welcome to the Cognittron test project!
 
 ## Development
 
