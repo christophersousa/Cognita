@@ -4,10 +4,10 @@ import { CardStep } from "~/components/Cards/CardStep";
 import { useEffect, useState } from "react";
 import AddIcon from "~/assets/icon/add.svg"
 import Modal from "~/components/Modal/ModalStep";
-import neo4j from 'neo4j-driver';
 import { fetchDataTrail } from "~/service/neo4js";
 import { IListStepsByTrail, IStep } from "~/interface/interfaces";
 import { Loading } from "~/components/Loading/Loading";
+import { ViewModal } from "~/components/Modal/ViewModal";
 
 export const meta: MetaFunction = () => {
   return [
@@ -18,11 +18,18 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   const [popUp, setPopUp] = useState<boolean>(false)
+  const [popUpView, setPopUpView] = useState<boolean>(false)
   const [data, setData] = useState<IListStepsByTrail>();
   const [loading, setLoading] = useState<boolean>(false)
+  const [selectStep, setSelectStep] = useState<IStep>()
 
   const handleAddStep = (step:IStep)=>{
-    data?.steps.push(step)
+    data?.steps.unshift(step)
+  }
+
+  const handleSelectStep = (step:IStep)=>{
+    setSelectStep(step)
+    setPopUpView(true)
   }
 
   useEffect(() => {
@@ -59,13 +66,16 @@ export default function Index() {
           </div>
           {/* List of steps */}
           <div className="flex flex-col gap-6 mt-10">
-            {data?.steps.map(step => (
-              <CardStep key={step.id} title={step.title} content={step.content} id={step.id}/>
+            {data?.steps.reverse().map(step => (
+              <div onClick={()=>handleSelectStep(step)}>
+                <CardStep key={step.id} title={step.title} content={step.content} id={step.id} />
+              </div>
             ))}
           </div>
         </div>
         {/* Modal */}
-        {popUp && <Modal setPopUp={setPopUp} handleAddStep={handleAddStep} />}
+        {popUp && <Modal setPopUp={setPopUp} handleAddStep={handleAddStep}/>}
+        {popUpView && <ViewModal setPopUp={setPopUpView} selectStep={selectStep}/>}
       </Container>
     </main>
   );

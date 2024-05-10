@@ -27,7 +27,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
-        closeOnClick: true,
+        closeOnClick: false,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
@@ -40,7 +40,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
-        closeOnClick: true,
+        closeOnClick: false,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
@@ -80,7 +80,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
 
   return (
     <div className='w-screen h-screen bg-[#4F4B5C] bg-opacity-70 fixed top-0 right-0 flex justify-center items-center'>
-      <div ref={modalRef} className='container bg-white p-10 rounded-md shadow-md py-12 w-[680px]'>
+      <div ref={modalRef} className='container bg-white p-10 rounded-3xl shadow-md py-12 w-[680px]'>
         <h1 className='font-semibold text-title text-secondary-100'>Adicionar Passo</h1>
         <form className='flex flex-col gap-4 mt-10' onSubmit={handleSubmit}>
             <div className='flex flex-col'>
