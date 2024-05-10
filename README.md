@@ -1,6 +1,4 @@
-# Welcome to Remix + Vite!
-
-📖 See the [Remix docs](https://remix.run/docs) and the [Remix Vite docs](https://remix.run/docs/en/main/guides/vite) for details on supported features.
+# Welcome to project of test para a Cognittron!
 
 ## Development
 
@@ -34,3 +32,4 @@ Make sure to deploy the output of `npm run build`
 
 - `build/server`
 - `build/client`
+
