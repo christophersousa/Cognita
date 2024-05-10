@@ -38,7 +38,6 @@ export default function ExplorePage(){
     const data:IListStepsByTrail = useLoaderData<typeof loader>();
     const [popUp, setPopUp] = useState<boolean>(false)
     const [popUpView, setPopUpView] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
     const [selectStep, setSelectStep] = useState<IStep>()
 
     const handleAddStep = (step:IStep)=>{
@@ -55,7 +54,7 @@ export default function ExplorePage(){
             <Container>
                 <Suspense fallback={<h1>Loading...</h1>}>
                     {/* content */}
-                    <div style={{display: loading?"none": "block"}} >
+                    <div >
                         '{/* Header */}
                         <div className="flex justify-between items-center">
                             <Await
