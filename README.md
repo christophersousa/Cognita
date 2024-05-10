@@ -1,5 +1,9 @@
 # Welcome to the Cognittron test project!
 
+## Configure
+Change the password and username in the file: app/service/neo4j.ts
+
+
 ## Development
 
 Run the Vite dev server:
