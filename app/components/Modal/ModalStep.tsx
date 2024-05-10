@@ -29,7 +29,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
       const data = await addStepByTrail(params.trailId || '', formData)
       setLoading(false)
       toast.success('Passo criado com sucesso!', {
-        position: "bottom-center",
+        position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,
@@ -42,7 +42,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
       handleAddStep(data)
     } catch (error) {
       toast.error('Não foi possível registrar esse passo, tente novamente mais tarde!', {
-        position: "bottom-center",
+        position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,

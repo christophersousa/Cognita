@@ -27,7 +27,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {children}
         <ScrollRestoration />
         <Scripts />
-        <ToastContainer />
+        <ToastContainer closeOnClick={false} closeButton={false}/>
       </body>
     </html>
   );
