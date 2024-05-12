@@ -1,7 +1,7 @@
 # Welcome to the Cognittron test project!
 
 ## Configure
-Change the password and username in the file: app/service/neo4j.ts
+Change the password, username and host in the file: .env
 
 
 ## Development
