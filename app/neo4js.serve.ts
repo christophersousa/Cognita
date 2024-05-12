@@ -1,9 +1,10 @@
 import neo4j from 'neo4j-driver';
 import { IListStepsByTrail, IStep } from '~/interface/interfaces';
 
-const username = 'neo4j'
-const password = '12345678'
-const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic(username, password));
+const host = process.env.NEO4J_URL || ''
+const username = process.env.NEO4J_USERNAME || ''
+const password = process.env.NEO4J_PASSWORD || ''
+const driver = neo4j.driver(host, neo4j.auth.basic(username, password));
 
 export async function fetchDataTrail(trailId:string):Promise<IListStepsByTrail> {
   const session = driver.session();
