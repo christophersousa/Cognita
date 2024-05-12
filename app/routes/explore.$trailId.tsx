@@ -83,7 +83,7 @@ clientLoader.hydrate = true;
 
 export function HydrateFallback() {
     return (
-        <div className="absolute top-1/2 right-1/2 flex flex-col items-center">
+        <div className="w-screen h-screen max-w-full flex flex-col items-center justify-center">
             <Loading loading={true} w="100px" h="100px"/>
             <p className="mt-4 font-medium text-lg text-center">Carregando ...</p>
         </div>
