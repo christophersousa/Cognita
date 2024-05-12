@@ -5,7 +5,7 @@ interface ILoading{
     h?: string
 }
 export const Loading = ({loading, color, w, h}:ILoading)=>{
-    const fill = color ? `fill-[${color}]`: "fill-primary"
+    const fill = color ? `fill-${color}`: "fill-primary"
     return(
         <div style={{display: loading ? 'block': 'none'}}>
             <svg aria-hidden="true" style={{width: w ? w: '52px', height: h? w: '52px'}} className={` text-gray-200 animate-spin dark:text-gray-600 ${fill}`} viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

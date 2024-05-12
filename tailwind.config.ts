@@ -16,6 +16,7 @@ export default {
           50: "var(--secondary-50)",
           75: "var(--secondary-75)",
           100: "var(--secondary-100)",
+          125: "var(--secondary-125)"
         }
       },
       fontSize: {

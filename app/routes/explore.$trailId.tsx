@@ -1,7 +1,7 @@
 import { LoaderFunction, redirect } from "@remix-run/node";
-import { Await, useLoaderData } from "@remix-run/react";
-import { fetchDataTrail } from "~/service/neo4js";
-import type { MetaFunction } from "@remix-run/node";
+import { Await, ClientLoaderFunctionArgs, useActionData, useLoaderData } from "@remix-run/react";
+import { addStepByTrail, fetchDataTrail } from "~/neo4js.serve";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Container } from "~/components/Container";
 import { CardStep } from "~/components/Cards/CardStep";
 import { Suspense, useEffect, useState } from "react";
@@ -10,6 +10,7 @@ import Modal from "~/components/Modal/ModalStep";
 import { IListStepsByTrail, IStep } from "~/interface/interfaces";
 import { Loading } from "~/components/Loading/Loading";
 import { ViewModal } from "~/components/Modal/ViewModal";
+import { Bounce, toast } from "react-toastify";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,6 +18,44 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Teste de desenvolvimento" },
   ];
 };
+
+
+export async function action({
+    params,
+    request,
+  }: ActionFunctionArgs) {
+    const trailID = params.trailId || '';
+    const body = await request.formData();
+    try {
+        const id = body.get("id")?.toString() || '';
+        const title = body.get("title")?.toString() || '';
+        const content = body.get("content")?.toString() || '';
+        const formData:IStep = {
+            id,
+            title,
+            content
+        }
+        if(formData.id == '' || formData.title == '' || formData.content == '' || trailID  == ''){
+            throw new Error('Valores não foram passados corretamente');
+        }
+        console.log("params: ", trailID)
+        console.log("form: ", formData)
+        const data = await addStepByTrail(trailID, formData)
+        return {
+            result:data,
+            status:200
+        }
+        
+    } catch (error) {
+        return {
+            result: {
+                id: '',
+                title: '',
+                content: ''
+            }, 
+            status:500}
+    }
+  }
 
 export let loader: LoaderFunction = async ({ params }) => {
     const { trailId } = params;
@@ -32,13 +71,33 @@ export let loader: LoaderFunction = async ({ params }) => {
     } catch (error) {
         return redirect("/404")
     }
-  };
+};
+
+export async function clientLoader({
+    serverLoader,
+    }: ClientLoaderFunctionArgs) {
+    const data = await serverLoader()
+    return data
+}
+clientLoader.hydrate = true; 
+
+export function HydrateFallback() {
+    return (
+        <div className="absolute top-1/2 right-1/2 flex flex-col items-center">
+            <Loading loading={true} w="100px" h="100px"/>
+            <p className="mt-4 font-medium text-lg text-center">Carregando ...</p>
+        </div>
+    );
+}
 
 export default function ExplorePage(){
     const data:IListStepsByTrail = useLoaderData<typeof loader>();
     const [popUp, setPopUp] = useState<boolean>(false)
     const [popUpView, setPopUpView] = useState<boolean>(false)
     const [selectStep, setSelectStep] = useState<IStep>()
+    const [loading, setLoading] = useState(false)
+
+    const dataAction = useActionData<typeof action>();
 
     const handleAddStep = (step:IStep)=>{
         data?.steps.unshift(step)
@@ -48,6 +107,43 @@ export default function ExplorePage(){
         setSelectStep(step)
         setPopUpView(true)
     }
+
+    const registerStep = ()=>{
+        setLoading(false)
+        if(dataAction?.status == 200){
+            handleAddStep(dataAction.result)
+            toast.success('Passo criado com sucesso!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+            setPopUp(false)
+        }else{
+            toast.error('Não foi possível registrar esse passo, tente novamente mais tarde!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+            });
+        }
+    }
+
+    useEffect(()=>{
+        if(dataAction){
+            registerStep()
+        }
+    },[dataAction])
 
     return (
         <main className="flex justify-center py-20">
@@ -85,7 +181,7 @@ export default function ExplorePage(){
                             }
                             children={(resolverStep) => (
                                 <div className="flex flex-col gap-6 mt-10">
-                                    {resolverStep.reverse().map(step => (
+                                    {resolverStep?.map(step => (
                                     <div onClick={()=>handleSelectStep(step)} key={step.id}>
                                         <CardStep  title={step.title} content={step.content} id={step.id} />
                                     </div>
@@ -96,7 +192,7 @@ export default function ExplorePage(){
                     </div>
                 </Suspense>
                 {/* Modal */}
-                {popUp && <Modal setPopUp={setPopUp} handleAddStep={handleAddStep}/>}
+                {popUp && <Modal setPopUp={setPopUp} setLoading={setLoading} loading={loading}/>}
                 {popUpView && <ViewModal setPopUp={setPopUpView} selectStep={selectStep}/>}
             </Container>
         </main>

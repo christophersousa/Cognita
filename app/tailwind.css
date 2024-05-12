@@ -10,11 +10,12 @@
       --foreground: #4F4B5C;
        /* colors */
       --primary: #7357FF;
-      --primary-100: #7357FF;
+      --primary-100: #5939fa;
       --secondary: #4F4B5C;
       --secondary-50: #E2E2E4;
       --secondary-75: #ECECED;
       --secondary-100: #110C22;
+      --secondary-125: #8a8a8a;
     }
 }
 
