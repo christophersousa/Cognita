@@ -1,6 +1,6 @@
 import { LoaderFunction, redirect } from "@remix-run/node";
-import { Await, useLoaderData } from "@remix-run/react";
-import { fetchDataTrail } from "~/service/neo4js";
+import { Await, ClientLoaderFunctionArgs, useLoaderData } from "@remix-run/react";
+import { fetchDataTrail } from "~/neo4js.serve";
 import type { MetaFunction } from "@remix-run/node";
 import { Container } from "~/components/Container";
 import { CardStep } from "~/components/Cards/CardStep";
@@ -32,7 +32,29 @@ export let loader: LoaderFunction = async ({ params }) => {
     } catch (error) {
         return redirect("/404")
     }
-  };
+};
+
+function sleep() {
+    return new Promise(resolve => setTimeout(resolve, 50000));
+  }
+
+export async function clientLoader({
+    serverLoader,
+    }: ClientLoaderFunctionArgs) {
+    const data = await serverLoader()
+    sleep()
+    return data
+}
+clientLoader.hydrate = true; 
+
+export function HydrateFallback() {
+    return (
+        <div className="absolute top-1/2 right-1/2 flex flex-col items-center">
+            <Loading loading={true} w="100px" h="100px"/>
+            <p className="mt-4 font-medium text-lg text-center">Carregando ...</p>
+        </div>
+    );
+}
 
 export default function ExplorePage(){
     const data:IListStepsByTrail = useLoaderData<typeof loader>();
@@ -85,7 +107,7 @@ export default function ExplorePage(){
                             }
                             children={(resolverStep) => (
                                 <div className="flex flex-col gap-6 mt-10">
-                                    {resolverStep.reverse().map(step => (
+                                    {resolverStep?.map(step => (
                                     <div onClick={()=>handleSelectStep(step)} key={step.id}>
                                         <CardStep  title={step.title} content={step.content} id={step.id} />
                                     </div>
