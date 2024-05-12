@@ -104,17 +104,17 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
             </div>
             <div className='flex justify-end gap-6 mt-10'>
                 <button 
-                    className='py-3 px-6 min-w-36 border border-primary text-primary-100 font-semibold rounded-xl'
+                    className='py-3 px-6 min-w-36 border border-primary text-primary font-semibold rounded-xl hover:text-primary-100 hover:border-primary-100'
                     onClick={() => setPopUp(false)}
                 >
                     Cancelar
                 </button>
                 <button 
-                    disabled={disable}
+                    disabled={disable || loading}
                     type='submit'
-                    className='py-3 min-w-36 flex justify-center items-center px-6 bg-primary text-white font-semibold rounded-xl disabled:bg-foreground'
+                    className='py-3 min-w-36 flex justify-center items-center px-6 bg-primary text-white font-semibold rounded-xl disabled:bg-secondary-125'
                 >
-                  {loading? <Loading loading={loading} color='#000' w='15px' h='15px'/> : "Criar passo"}
+                  {loading? <Loading loading={loading} w='20px' h='20px'/> : "Criar passo"}
                 </button>
             </div>
         </form>

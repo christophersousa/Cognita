@@ -40,7 +40,7 @@ export const ViewModal = ({setPopUp, selectStep}:PropsViewModal) =>{
             </div>
             <div className='flex justify-end gap-6 mt-10'>
                 <button 
-                    className='py-3 px-6 min-w-36 border border-primary text-primary-100 font-semibold rounded-xl'
+                    className='py-3 px-6 min-w-36 border border-primary text-primary font-semibold rounded-xl hover:text-primary-100 hover:border-primary-100'
                     onClick={() => setPopUp(false)}
                 >
                     Fechar
