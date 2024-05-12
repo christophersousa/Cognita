@@ -35,11 +35,11 @@ export async function action({
             title,
             content
         }
+        
         if(formData.id == '' || formData.title == '' || formData.content == '' || trailID  == ''){
             throw new Error('Valores não foram passados corretamente');
         }
-        console.log("params: ", trailID)
-        console.log("form: ", formData)
+
         const data = await addStepByTrail(trailID, formData)
         return {
             result:data,
