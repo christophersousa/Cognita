@@ -40,6 +40,7 @@ function Modal({setPopUp, handleAddStep}:PropsModal) {
         transition: Bounce,
         });
       handleAddStep(data)
+      setPopUp(false)
     } catch (error) {
       toast.error('Não foi possível registrar esse passo, tente novamente mais tarde!', {
         position: "top-right",

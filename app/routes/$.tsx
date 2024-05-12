@@ -1,8 +1,8 @@
-import { json } from "@remix-run/node";
+import { LoaderFunction, json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Container } from "~/components/Container";
 
-export const loader = () => {
+export const loader: LoaderFunction = () => {
     return json(null, { status: 404 });
 };
 
