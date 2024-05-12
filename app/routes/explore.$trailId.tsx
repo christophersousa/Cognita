@@ -34,15 +34,10 @@ export let loader: LoaderFunction = async ({ params }) => {
     }
 };
 
-function sleep() {
-    return new Promise(resolve => setTimeout(resolve, 50000));
-  }
-
 export async function clientLoader({
     serverLoader,
     }: ClientLoaderFunctionArgs) {
     const data = await serverLoader()
-    sleep()
     return data
 }
 clientLoader.hydrate = true; 
