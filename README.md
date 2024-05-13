@@ -2,7 +2,28 @@
 
 ## Configure
 Change the password, username and host in the file: .env
+```shellscript
+  NEO4J_URL=
+  NEO4J_USERNAME=
+  NEO4J_PASSWORD=
+```
 
+## Script Cypher 
+
+### list steps by trail
+```shellscript
+  MATCH (t:Trail {id: $trailId})
+  OPTIONAL MATCH (t)-[:HAS_STEP]->(s:Step)
+  RETURN t, COLLECT(s) AS steps
+```
+
+### create a new step
+```shellscript
+  MATCH (t:Trail {id: $trailId})
+  CREATE (s:Step $stepData)
+  CREATE (t)-[:HAS_STEP]->(s)
+  RETURN s
+```
 
 ## Development
 
@@ -25,15 +46,3 @@ Then run the app in production mode:
 ```sh
 npm start
 ```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
