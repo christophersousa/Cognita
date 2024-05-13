@@ -14,7 +14,7 @@ import { Bounce, toast } from "react-toastify";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Cognittron" },
+    { title: "Cognita" },
     { name: "description", content: "Teste de desenvolvimento" },
   ];
 };
