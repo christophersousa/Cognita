@@ -1,4 +1,4 @@
-# Welcome to the Cognita test project!
+# Welcome to the Cognita!
 
 ## Configure
 Change the password, username and host in the file: .env
